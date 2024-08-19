@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautyProductApp.MainPage"          
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             Title="Beauty Products" 
+            BackgroundColor="WhiteSmoke" >
+    <NavigationPage.TitleView>
+        <StackLayout>
+            <Label Text="Beauty Products" TextColor="White" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+        </StackLayout>
+    </NavigationPage.TitleView>
+
+    <StackLayout Margin="10,10,10,10" >
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+
+            </Grid.ColumnDefinitions>
+            <Frame Grid.Row="0" Grid.Column="0" Margin="0" Padding="0"  CornerRadius="12" >
+                <Entry Text="{Binding SearchText}" Placeholder="Search" HorizontalOptions="Fill" ReturnCommand="{Binding SearchTextCommand}">
+
+                </Entry>
+
+            </Frame>
+
+        </Grid>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Text="Sort BY Name" FontSize="10"  FontAttributes="Bold" Command="{Binding SortByName}"></Button>
+            <Button Grid.Column="1" Grid.Row="0" Text="sort by brand"  FontSize="10"  FontAttributes="Bold"  Command="{Binding SortByBrand}"></Button>
+            <Button Grid.Column="2" Grid.Row="0"  Text="sort by Rating"  FontSize="10"   FontAttributes="Bold" Command="{Binding SortByRating}"></Button>
+        </Grid>
+        <ActivityIndicator IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}" />
+        <StackLayout>
+            <Label Text="No Data Found" 
+                   IsVisible="{Binding ErrorMessage}" 
+                   TextColor="Red" HorizontalOptions="Center" VerticalOptions="Center" />
+
+        <ListView ItemsSource="{Binding ProductsList}"
+                      IsPullToRefreshEnabled="True"
+                      RefreshCommand="{Binding RefreshCommand}"
+                      IsRefreshing="{Binding IsToRefresh}"
+                      HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame Margin="0,10,0,0" CornerRadius="13">
+                            <Grid  ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ffimageloading:CachedImage Source="{Binding image_url_small}" 
+                                                            WidthRequest="80" 
+                                                            HeightRequest="80" 
+                                                            DownsampleToViewSize="true"
+                                                            RetryCount="3"
+                                                            RetryDelay="500"
+                                                            LoadingPlaceholder="loading.png"
+                                                            ErrorPlaceholder="ErrorImg.png"
+                                                            Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+                                <StackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="{Binding product_name}" FontAttributes="Bold" />
+
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Brand : "/>
+                                                <Span Text="{Binding brand_name}"  />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Hazard Rating : " />
+                                                <Span Text="{Binding hazard_rating_string}"  />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label Text="{Binding hazard_rating_category}" />
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        </StackLayout>
+
+
+
+    </StackLayout>
+
+</ContentPage>
